@@ -2,12 +2,13 @@
   "name": "glasscordify",
   "version": "1.0.0",
   "description": "Installer for Glasscord",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {},
   "author": "Naomi Calabretta <me@arytonex.pw> (http://arytonex.pw)",
   "license": "Apache-2.0",
   "dependencies": {
     "asar": "^3.0.3",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "rimraf": "^3.0.2"
   }
 }
