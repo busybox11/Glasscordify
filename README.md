@@ -4,7 +4,7 @@ TODO:
 - [x] Write basic utility code to handle injection
 - [x] Write routines to patch applications
 - [x] Write a thing that will allow us to blacklist certain applications
-- [ ] Write a thing that will detect the Electron version so we can avoid injecting where we know Glasscord won't ever work
+- [x] Write a thing that will detect the Electron version so we can avoid injecting where we know Glasscord won't ever work
 - [ ] Write the actual user interface (CLI)
 - [ ] Write the actual user interface for noobs (GUI)
 - [ ] Write the packaging rules so we can package the installer and ship it
