@@ -19,19 +19,35 @@ const lib = require("glasscordify-lib");
 
 module.exports = class LibInterface {
 	
-	static installDrop(files){
+	static init(win){
+		if(!lib.Utils.isGlasscordDownloaded()){
+			win.webContents.send("asar-download");
+			console.log("Downloading asar!");
+			lib.Utils.downloadGlasscordAsar().then((result) => {
+				if(result){
+					console.log("Download successful");
+					win.webContents.send("asar-success");
+				}else{
+					console.log("Download failed");
+					win.webContents.send("asar-failure");
+				}
+			});
+		}
+	}
+	
+	static installDrop(win, files){
 		console.log("install drop", files);
 	}
 	
-	static uninstallDrop(files){
+	static uninstallDrop(win, files){
 		console.log("uninstall drop", files);
 	}
 	
-	static installClicked(){
+	static installClicked(win){
 		console.log("install clicked");
 	}
 	
-	static uninstallClicked(){
+	static uninstallClicked(win){
 		console.log("uninstall clicked");
 	}
 	

@@ -87,12 +87,14 @@ function createWindow(){
 	// events
 	electron.ipcMain.on("close", () => win.close());
 	electron.ipcMain.on("minimize", () => win.minimize());
-	electron.ipcMain.on("installClicked", () => lib.installClicked());
-	electron.ipcMain.on("uninstallClicked", () => lib.uninstallClicked());
-	electron.ipcMain.on("installDrop", (e,files) => lib.installDrop(files));
-	electron.ipcMain.on("uninstallDrop", (e,files) => lib.uninstallDrop(files));
+	electron.ipcMain.on("installClicked", () => lib.installClicked(win));
+	electron.ipcMain.on("uninstallClicked", () => lib.uninstallClicked(win));
+	electron.ipcMain.on("installDrop", (e,files) => lib.installDrop(win, files));
+	electron.ipcMain.on("uninstallDrop", (e,files) => lib.uninstallDrop(win, files));
 	
 	win.loadURL("file://" + __dirname + "/resources/index.html");
+	
+	lib.init(win);
 }
 
 function getIcon(){
