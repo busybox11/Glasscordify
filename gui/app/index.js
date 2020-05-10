@@ -78,8 +78,7 @@ function createWindow(){
 	
 	glasstron.update(win, {
 		windows: {
-			blurType: 'acrylic',
-			performanceMode: true
+			blurType: 'blurbehind',
 		},
 		linux: {
 			requestBlur: true
