@@ -28,7 +28,8 @@
     "asar": "^3.0.3",
     "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "windows-shortcuts-ps": "github:cbartondock/windows-shortcuts-ps"
   },
   "devDependencies": {}
 }
