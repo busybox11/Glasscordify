@@ -1,10 +1,10 @@
 {
-  "name": "glasscordify",
+  "name": "glasscordify-cli",
   "version": "1.0.0",
   "description": "Make your installed Electron app look sexy with Glasscord!",
   "main": "app/index.js",
   "scripts": {
-    "test": "electron ."
+    "test": "node ."
   },
   "repository": {
     "type": "git",
@@ -26,12 +26,8 @@
     "url": "https://github.com/AryToNeX/Glasscordify/issues"
   },
   "homepage": "https://github.com/AryToNeX/Glasscordify#readme",
-  "devDependencies": {
-    "electron": "^8.2.5",
-    "electron-builder": "^22.6.0"
-  },
+  "devDependencies": {},
   "dependencies": {
-    "glasscordify-lib": "file:../lib",
-    "glasstron": "github:AryToNeX/Glasstron"
+    "glasscordify-lib": "file:../lib"
   }
 }
