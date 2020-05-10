@@ -20,6 +20,7 @@ glasstron.init(); // THIS should be called before we require the BrowserWindow c
 
 const electron = require("electron");
 const exec = require("child_process").execSync;
+const path = require("path");
 const lib = require("./lib_interface.js");
 
 // Check if an instance is already running
@@ -61,6 +62,7 @@ function createWindow(){
 		title: "Glasscordify",
 		show: true,
 		backgroundColor: "#A0FFFFFF",
+		icon: getIcon(),
 		webPreferences: {
 			nodeIntegration: true
 		}
@@ -77,15 +79,9 @@ function createWindow(){
 	});
 	
 	glasstron.update(win, {
-		windows: {
-			blurType: 'blurbehind',
-		},
-		linux: {
-			requestBlur: true
-		},
-		macos: {
-			vibrancy: 'fullscreen-ui'
-		}
+		windows: {blurType: 'blurbehind'},
+		linux: {requestBlur: true},
+		macos: {vibrancy: 'fullscreen-ui'}
 	});
 	
 	// events
@@ -97,6 +93,15 @@ function createWindow(){
 	electron.ipcMain.on("uninstallDrop", (e,files) => lib.uninstallDrop(files));
 	
 	win.loadURL("file://" + __dirname + "/resources/index.html");
+}
+
+function getIcon(){
+	switch(process.platform){
+		case "linux": return path.resolve(__dirname, "icon/icon.png");
+		case "darwin": return path.resolve(__dirname, "icon/icon.icns");
+		case "win32": return path.resolve(__dirname, "icon/icon.ico");
+	}
+	return undefined;
 }
 
 function openExternal(url){
