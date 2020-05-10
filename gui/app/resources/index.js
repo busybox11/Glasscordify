@@ -91,7 +91,7 @@ function changeApplicationState (newState) {
 			}
 		}
 		currentState = newState;
-		
+
 		// Update the sexy value
 		const sexy = document.querySelector(".sexy");
 		if(sexy !== null) sexy.innerText = sexyWords[Math.floor(Math.random() * sexyWords.length)];
@@ -117,12 +117,12 @@ window.ondrop = e => {
 };
 buttonElement.addEventListener("drop", e => {
 	if (currentState === ApplicationStates.DRAGGING && e.dataTransfer.files.length !== 0) {
-		ipc.send("installDrop", e.dataTransfer.files);
+		ipc.send("installDrop", [ ...e.dataTransfer.files ].map(f => f.path));
 	}
 });
 secondaryButtonElement.addEventListener("drop", e => {
 	if (currentState === ApplicationStates.DRAGGING && e.dataTransfer.files.length !== 0) {
-		ipc.send("uninstallDrop", e.dataTransfer.files);
+		ipc.send("uninstallDrop", [ ...e.dataTransfer.files ].map(f => f.path));
 	}
 });
 
