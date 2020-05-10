@@ -1,0 +1,211 @@
+/*
+   Copyright 2020 AryToNeX
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+/* Variables */
+:root {
+	--glasscord-gradient: linear-gradient(145deg, #dd2dfd, #9645fb);
+	--green-gradient: linear-gradient(145deg, #5fff53, #16ef00);
+	--red-gradient: linear-gradient(145deg, #ff2222, #b40000);
+}
+
+/* General styling */
+* { box-sizing: border-box; }
+
+html {
+	background: transparent; /* Ensures Glasstron will do its job */
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	font-family: 'Inter', sans-serif;
+	display: flex;
+	flex-direction: column;
+	color: #393939;
+	user-select: none;
+}
+
+/* Button normalization */
+button {
+	border: none;
+	outline: none;
+	background: none;
+	font-size: inherit;
+	font-family: inherit;
+	color: inherit;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+}
+
+/* Draggable area */
+.drag {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	-webkit-app-region: drag;
+}
+
+/* Minimize and close button */
+.minimize, .close {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	opacity: .6;
+	transition: all 0.5s;
+	color: black;
+	-webkit-app-region: no-drag;
+}
+
+/* Minimize and close button hover */
+.minimize:hover, .close:hover {
+	opacity: .8;
+	transition: all 0.5s;
+}
+
+.minimize {
+	top: 20px;
+	right: 50px;
+}
+
+.close {
+	top: 20px;
+	right: 20px;
+}
+
+/* Main section */
+main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	max-width: 450px;
+	margin: auto;
+}
+
+/* Headline */
+.headline {
+	text-align: center;
+	font-size: 1.7em;
+	padding-bottom: 45px;
+}
+
+.headline .sexy {
+	color: #fd8484;
+}
+
+.headline .glasscord {
+	color: transparent;
+	background: var(--glasscord-gradient);
+	-webkit-background-clip: text;
+}
+
+.headline .whoops {
+	color: transparent;
+	background: var(--red-gradient);
+	-webkit-background-clip: text;
+}
+
+.headline .drag-text {
+	color: #399ee4;
+}
+
+/* Buttons */
+.buttons {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.buttons .button {
+	font-size: 1.2em;
+	width: 270px;
+	height: 70px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 35px;
+	transition: background .3s;
+}
+
+.buttons .button + .button {
+	margin-top: 25px;
+}
+
+.buttons .button.glasscord:hover {
+	box-shadow: -6px 0px 50px 0 #c03cdb30, 0px 6px 50px 0px #dd2dfd30, 6px 0px 50px 0px #9645fb30;
+	transform: scale(1.02);
+	transition: all 0.5s;
+}
+.buttons .button.glasscord {
+	background: var(--glasscord-gradient);
+	box-shadow: 0px 8px 16px 0px #00000030;
+	color: #fdfdfd;
+	transition: all 0.5s;
+}
+
+.buttons .button.green {
+	background: var(--green-gradient);
+}
+
+.buttons .button.red {
+	background: var(--red-gradient);
+	color: #fdfdfd;
+}
+
+.buttons .button.outline {
+	color: transparent;
+	border: 2px dashed;
+	box-shadow: none;
+	-webkit-background-clip: text;
+}
+
+.buttons .button.glasscord.outline {
+	border-color: #c03cdb;
+}
+
+.buttons .button.red.outline {
+	border-color: #ff0000;
+}
+
+.buttons .sub-button {
+	margin-top: 10px;
+}
+
+.buttons .sub-button a {
+	text-decoration: none;
+	color: transparent;
+	background: var(--red-gradient);
+	-webkit-background-clip: text;
+}
+
+.buttons .sub-button a:hover {
+	text-decoration: underline;
+	text-decoration-color: #ff0000;
+}
+
+/* Footer */
+footer {
+	flex-shrink: 0;
+	display: flex;
+	padding: 20px;
+	justify-content: space-between;
+	opacity: .6;
+}

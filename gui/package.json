@@ -1,0 +1,37 @@
+{
+  "name": "glasscordify",
+  "version": "1.0.0",
+  "description": "Make your installed Electron app look sexy with Glasscord!",
+  "main": "app/index.js",
+  "scripts": {
+    "test": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AryToNeX/Glasscordify.git"
+  },
+  "keywords": [
+    "electron",
+    "gui",
+    "glasscord",
+    "composition",
+    "effects",
+    "window-effects",
+    "injection",
+    "glasstron"
+  ],
+  "author": "Naomi Calabretta <me@arytonex.pw> (http://arytonex.pw)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/AryToNeX/Glasscordify/issues"
+  },
+  "homepage": "https://github.com/AryToNeX/Glasscordify#readme",
+  "devDependencies": {
+    "electron": "^8.2.5",
+    "electron-builder": "^22.6.0",
+    "glasscordify-lib": "file:../lib"
+  },
+  "dependencies": {
+    "glasstron": "github:AryToNeX/Glasstron"
+  }
+}
