@@ -33,7 +33,10 @@ html, body {
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	font-family: 'Inter', sans-serif;
+	font-family: 'Inter', sans-serif,
+		"Apple Color Emoji",
+		"Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji"; /* Emoji font stack for <3 in footer. */
 	display: flex;
 	flex-direction: column;
 	color: #393939;
