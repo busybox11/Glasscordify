@@ -207,5 +207,15 @@ footer {
 	display: flex;
 	padding: 20px;
 	justify-content: space-between;
+	align-items: center;
 	opacity: .6;
+}
+
+.links {
+	flex-shrink: 0;
+}
+
+.links a {
+	text-decoration: none;
+	margin-left: 8px;
 }
