@@ -192,13 +192,13 @@ main {
 }
 
 .buttons .button.glasscord.outline {
-	border-color: #c03cdb;
+	border-color: var(--glasscord-gradient);
 }
 
 .buttons .button.glasscord.outline:hover {
 	border-color: white;
 	color: white;
-	background: #c03cdb;
+	background: var(--glasscord-gradient);
 }
 
 .buttons .button.red.outline {
