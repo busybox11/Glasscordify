@@ -52,19 +52,19 @@ button {
 	cursor: pointer;
 }
 
-/* Close button */
+/* Draggable area */
 .drag {
-	position: absolute;	
-	top: 0;	
-	left: 0;	
-	width: 100%;	
-	height: 50px;	
-	-webkit-app-region: drag;	
-}	
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	-webkit-app-region: drag;
+}
 
-/* Minimize and close button */	
-.minimize, .close {	
-	width: 24px;	
+/* Minimize and close button */
+.minimize, .close {
+	width: 24px;
 	height: 24px;
 	position: absolute;
 	top: 15px;
@@ -72,11 +72,11 @@ button {
 	padding: 5px 12px;
 	opacity: .6;
 	transition: all 0.5s;
-	color: black;	
+	color: black;
 	-webkit-app-region: no-drag;
 }
 
-/* Close button hover */
+/* Minimize and close button hover */
 .minimize:hover, .close:hover {
 	opacity: .8;
 	transition: all 0.5s;
@@ -230,11 +230,11 @@ footer {
 	opacity: .6;
 }
 
-.links {	
-	flex-shrink: 0;	
-}	
+.links {
+	flex-shrink: 0;
+}
 
 .links a {	
-	text-decoration: none;	
-	margin-left: 8px;	
+	text-decoration: none;
+	margin-left: 8px;
 }
