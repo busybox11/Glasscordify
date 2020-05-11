@@ -23,11 +23,6 @@
 
 /* General styling */
 * { box-sizing: border-box; }
-
-html {
-	background: transparent; /* Ensures Glasstron will do its job */
-}
-
 html, body {
 	margin: 0;
 	padding: 0;
@@ -41,6 +36,7 @@ html, body {
 	flex-direction: column;
 	color: #393939;
 	user-select: none;
+	background: transparent; /* Ensures Glasstron will do its job */
 }
 
 /* Button normalization */
@@ -56,41 +52,20 @@ button {
 	cursor: pointer;
 }
 
-/* Draggable area */
-.drag {
+/* Close button */
+.close {
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 50px;
-	-webkit-app-region: drag;
-}
-
-/* Minimize and close button */
-.minimize, .close {
-	width: 24px;
-	height: 24px;
-	position: absolute;
+	top: 15px;
+	right: 25px;
+	padding: 5px 12px;
 	opacity: .6;
 	transition: all 0.5s;
-	color: black;
-	-webkit-app-region: no-drag;
 }
 
-/* Minimize and close button hover */
-.minimize:hover, .close:hover {
+/* Close button hover */
+.close:hover {
 	opacity: .8;
 	transition: all 0.5s;
-}
-
-.minimize {
-	top: 20px;
-	right: 50px;
-}
-
-.close {
-	top: 20px;
-	right: 20px;
 }
 
 /* Main section */
@@ -111,7 +86,7 @@ main {
 }
 
 .headline .sexy {
-	color: #e46767;
+	color: #fd8484;
 }
 
 .headline .glasscord {
@@ -126,7 +101,7 @@ main {
 	-webkit-background-clip: text;
 }
 
-.headline .drag-text {
+.headline .drag {
 	color: #399ee4;
 }
 
@@ -152,11 +127,6 @@ main {
 	margin-top: 25px;
 }
 
-.buttons .button.glasscord:hover {
-	box-shadow: -6px 0px 50px 0 #c03cdb30, 0px 6px 50px 0px #dd2dfd30, 6px 0px 50px 0px #9645fb30;
-	transform: scale(1.02);
-	transition: all 0.5s;
-}
 .buttons .button.glasscord {
 	background: var(--glasscord-gradient);
 	box-shadow: 0px 8px 16px 0px #00000030;
@@ -164,13 +134,33 @@ main {
 	transition: all 0.5s;
 }
 
+.buttons .button.glasscord:hover {
+	box-shadow: -6px 0px 50px 0 #c03cdb30, 0px 6px 50px 0px #dd2dfd30, 6px 0px 50px 0px #9645fb30;
+	transform: scale(1.02);
+	transition: all 0.5s;
+}
+
 .buttons .button.green {
 	background: var(--green-gradient);
+	transition: all 0.5s;
+}
+
+.buttons .button.green:hover {
+	box-shadow: -6px 0px 50px 0 #5fff5330, 0px 6px 50px 0px #35f52330, 6px 0px 50px 0px #16ef0030;
+	transform: scale(1.02);
+	transition: all 0.5s;
 }
 
 .buttons .button.red {
 	background: var(--red-gradient);
 	color: #fdfdfd;
+	transition: all 0.5s;
+}
+
+.buttons .button.red:hover {
+	box-shadow: -6px 0px 50px 0 #ff000030, 0px 6px 50px 0px #ff000030, 6px 0px 50px 0px #ff000030;
+	transform: scale(1.02);
+	transition: all 0.5s;
 }
 
 .buttons .button.outline {
@@ -184,8 +174,20 @@ main {
 	border-color: #c03cdb;
 }
 
+.buttons .button.glasscord.outline:hover {
+	border-color: white;
+	color: white;
+	background: #c03cdb;
+}
+
 .buttons .button.red.outline {
 	border-color: #ff0000;
+}
+
+.buttons .button.red.outline:hover {
+	border-color: white;
+	color: white;
+	background: #ff0000;
 }
 
 .buttons .sub-button {
@@ -210,15 +212,5 @@ footer {
 	display: flex;
 	padding: 20px;
 	justify-content: space-between;
-	align-items: center;
 	opacity: .6;
-}
-
-.links {
-	flex-shrink: 0;
-}
-
-.links a {
-	text-decoration: none;
-	margin-left: 8px;
 }
