@@ -1,2 +1,7 @@
+# Code editors
+.vscoce
+.idea
+
+# Node
 **/node_modules/*
 **/package-lock.json

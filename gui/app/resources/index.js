@@ -102,6 +102,38 @@ function changeApplicationState (newState) {
 document.querySelector(".close").addEventListener("click", () => ipc.send("close"));
 document.querySelector(".minimize").addEventListener("click", () => ipc.send("minimize"));
 buttonElement.addEventListener("click", () => currentState !== ApplicationStates.DRAGGING && ipc.send("installClicked"));
+
+// Modal
+const modal = document.querySelector('.modal');
+const openModal = function () {
+	window.requestAnimationFrame(() => {
+		document.body.classList.add('i-wish-backdrop-filter-would-work-and-not-require-me-to-blur-the-body')
+		modal.setAttribute('aria-hidden', 'false'); // Mark it as immediately visible
+		modal.classList.remove('hidden');
+		modal.classList.add('entering');
+		setTimeout(() => window.requestAnimationFrame(() => {
+			modal.classList.remove('entering');
+		}), 300)
+	});
+}
+const closeModal = function () {
+	window.requestAnimationFrame(() => {
+		document.body.classList.remove('i-wish-backdrop-filter-would-work-and-not-require-me-to-blur-the-body')
+		modal.setAttribute('aria-hidden', 'true'); // Mark it as immediately hidden
+		modal.classList.add('leaving');
+		setTimeout(() => window.requestAnimationFrame(() => {
+			modal.classList.remove('leaving');
+			modal.classList.add('hidden');
+		}), 300)
+	});
+}
+
+document.querySelector('.modal-inner').addEventListener('click', e => e.stopPropagation());
+document.querySelector('#awesome').addEventListener('click', openModal);
+document.querySelector('#modal-close').addEventListener('click', closeModal);
+document.querySelector('.modal').addEventListener('click', closeModal);
+
+// Drag and drop
 window.ondragover = e => {
 	if ([ ...e.dataTransfer.items ].some(f => f.kind === "file")) {
 		changeApplicationState(ApplicationStates.DRAGGING);
