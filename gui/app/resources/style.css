@@ -67,7 +67,6 @@ button {
 	width: 24px;
 	height: 24px;
 	position: absolute;
-	padding: 5px 12px;
 	opacity: .6;
 	transition: all 0.5s;
 	color: black;
