@@ -67,13 +67,21 @@ button {
 	width: 24px;
 	height: 24px;
 	position: absolute;
-	top: 15px;
-	right: 25px;
 	padding: 5px 12px;
 	opacity: .6;
 	transition: all 0.5s;
 	color: black;
 	-webkit-app-region: no-drag;
+}
+
+.minimize {
+	top: 20px;
+	right: 50px;
+}
+
+.close {
+	top: 20px;
+	right: 20px;
 }
 
 /* Minimize and close button hover */
@@ -234,7 +242,7 @@ footer {
 	flex-shrink: 0;
 }
 
-.links a {	
+.links a {
 	text-decoration: none;
 	margin-left: 8px;
 }
