@@ -61,7 +61,7 @@ module.exports = class LibInterface {
 				{ name: "Applications or links to them", extensions: ["*"]} // We can't filter for Linux executables #blameElectron
 			]
 		});
-		if(files.length !== 0)
+		if(typeof files !== "undefined")
 			return this.install(win, files[0]);
 		
 		win.webContents.send("error", "You didn't select any file!");
@@ -76,7 +76,7 @@ module.exports = class LibInterface {
 				{ name: "Applications or links to them", extensions: ["*"]} // We can't filter for Linux executables #blameElectron
 			]
 		});
-		if(files.length !== 0)
+		if(typeof files !== "undefined")
 			return this.uninstall(win, files[0]);
 		
 		win.webContents.send("error", "You didn't select any file!");
