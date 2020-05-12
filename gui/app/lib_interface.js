@@ -16,6 +16,7 @@
 "use strict";
 
 const path = require("path");
+const electron = require("electron");
 const lib = require("glasscordify-lib");
 
 module.exports = class LibInterface {
@@ -53,11 +54,33 @@ module.exports = class LibInterface {
 	}
 	
 	static installClicked(win){
-		console.log("install clicked");
+		const files = electron.dialog.showOpenDialogSync(win, {
+			title: "Glasscordify - Please choose the application you want to patch",
+			properties: ["openFile", "dontAddToRecent"],
+			filters: [
+				{ name: "Applications or links to them", extensions: ["*"]} // We can't filter for Linux executables #blameElectron
+			]
+		});
+		if(files.length !== 0)
+			return this.install(win, files[0]);
+		
+		win.webContents.send("error", "You didn't select any file!");
+		return false;
 	}
 	
 	static uninstallClicked(win){
-		console.log("uninstall clicked");
+		const files = electron.dialog.showOpenDialogSync(win, {
+			title: "Glasscordify - Please choose the application you want to restore",
+			properties: ["openFile", "dontAddToRecent"],
+			filters: [
+				{ name: "Applications or links to them", extensions: ["*"]} // We can't filter for Linux executables #blameElectron
+			]
+		});
+		if(files.length !== 0)
+			return this.uninstall(win, files[0]);
+		
+		win.webContents.send("error", "You didn't select any file!");
+		return false;
 	}
 	
 	static dropFilter(files){
