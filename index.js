@@ -15,4 +15,5 @@
 */
 "use strict";
 
-require("./lib");
+const lib = require("./lib");
+// TEST BENCH!!!
