@@ -37,11 +37,19 @@ module.exports = class LibInterface {
 	}
 	
 	static installDrop(win, files){
-		console.log("install drop", files);
+		files = this.dropFilter(files);
+		if(files.length !== 0)
+			return this.install(files[0]);
+		win.webContents.send("error", "You didn't drag/drop the correct file!");
+		return false;
 	}
 	
 	static uninstallDrop(win, files){
-		console.log("uninstall drop", files);
+		files = this.dropFilter(files);
+		if(files.length !== 0)
+			return this.uninstall(files[0]);
+		win.webContents.send("error", "You didn't drag/drop the correct file!");
+		return false;
 	}
 	
 	static installClicked(win){
