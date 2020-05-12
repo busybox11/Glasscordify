@@ -64,10 +64,11 @@ function createWindow(){
 		backgroundColor: "#A0FFFFFF",
 		icon: getIcon(),
 		webPreferences: {
+			enableRemoteModule: false,
 			nodeIntegration: true
 		}
 	});
-	
+
 	win.webContents.on('new-window', function(e, url){
 		e.preventDefault();
 		openExternal(url);
@@ -83,18 +84,21 @@ function createWindow(){
 		linux: {requestBlur: true},
 		macos: {vibrancy: 'fullscreen-ui'}
 	});
-	
+
 	// events
 	electron.ipcMain.on("close", () => win.close());
 	electron.ipcMain.on("minimize", () => win.minimize());
-	electron.ipcMain.on("installClicked", () => lib.installClicked(win));
-	electron.ipcMain.on("uninstallClicked", () => lib.uninstallClicked(win));
-	electron.ipcMain.on("installDrop", (e,files) => lib.installDrop(win, files));
-	electron.ipcMain.on("uninstallDrop", (e,files) => lib.uninstallDrop(win, files));
-	
+	electron.ipcMain.on("install-clicked", () => lib.installClicked(win));
+	electron.ipcMain.on("uninstall-clicked", () => lib.uninstallClicked(win));
+	electron.ipcMain.on("install-drop", (e,files) => lib.installDrop(win, files));
+	electron.ipcMain.on("uninstall-drop", (e,files) => lib.uninstallDrop(win, files));
+	electron.ipcMain.on("restart", () => {
+		electron.app.quit();
+		electron.app.relaunch();
+	});
+
 	win.loadURL("file://" + __dirname + "/resources/index.html");
-	
-	lib.init(win);
+	electron.ipcMain.on("ready", () => lib.init(win));
 }
 
 function getIcon(){

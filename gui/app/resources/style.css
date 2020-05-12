@@ -23,11 +23,6 @@
 
 /* General styling */
 * { box-sizing: border-box; }
-
-html {
-	background: transparent; /* Ensures Glasstron will do its job */
-}
-
 html, body {
 	margin: 0;
 	padding: 0;
@@ -41,6 +36,11 @@ html, body {
 	flex-direction: column;
 	color: #393939;
 	user-select: none;
+	background: transparent; /* Ensures Glasstron will do its job */
+}
+
+img {
+	-webkit-user-drag: none;
 }
 
 /* Button normalization */
@@ -64,6 +64,7 @@ button {
 	width: 100%;
 	height: 50px;
 	-webkit-app-region: drag;
+	z-index: 2000;
 }
 
 /* Minimize and close button */
@@ -75,12 +76,7 @@ button {
 	transition: all 0.5s;
 	color: black;
 	-webkit-app-region: no-drag;
-}
-
-/* Minimize and close button hover */
-.minimize:hover, .close:hover {
-	opacity: .8;
-	transition: all 0.5s;
+	z-index: 2001;
 }
 
 .minimize {
@@ -91,6 +87,12 @@ button {
 .close {
 	top: 20px;
 	right: 20px;
+}
+
+/* Minimize and close button hover */
+.minimize:hover, .close:hover {
+	opacity: .8;
+	transition: all 0.5s;
 }
 
 /* Main section */
@@ -152,11 +154,6 @@ main {
 	margin-top: 25px;
 }
 
-.buttons .button.glasscord:hover {
-	box-shadow: -6px 0px 50px 0 #c03cdb30, 0px 6px 50px 0px #dd2dfd30, 6px 0px 50px 0px #9645fb30;
-	transform: scale(1.02);
-	transition: all 0.5s;
-}
 .buttons .button.glasscord {
 	background: var(--glasscord-gradient);
 	box-shadow: 0px 8px 16px 0px #00000030;
@@ -164,13 +161,33 @@ main {
 	transition: all 0.5s;
 }
 
+.buttons .button.glasscord:hover {
+	box-shadow: -6px 0px 50px 0 #c03cdb30, 0px 6px 50px 0px #dd2dfd30, 6px 0px 50px 0px #9645fb30;
+	transform: scale(1.02);
+	transition: all 0.5s;
+}
+
 .buttons .button.green {
 	background: var(--green-gradient);
+	transition: all 0.5s;
+}
+
+.buttons .button.green:hover {
+	box-shadow: -6px 0px 50px 0 #5fff5330, 0px 6px 50px 0px #35f52330, 6px 0px 50px 0px #16ef0030;
+	transform: scale(1.02);
+	transition: all 0.5s;
 }
 
 .buttons .button.red {
 	background: var(--red-gradient);
 	color: #fdfdfd;
+	transition: all 0.5s;
+}
+
+.buttons .button.red:hover {
+	box-shadow: -6px 0px 50px 0 #ff000030, 0px 6px 50px 0px #ff000030, 6px 0px 50px 0px #ff000030;
+	transform: scale(1.02);
+	transition: all 0.5s;
 }
 
 .buttons .button.outline {
@@ -181,11 +198,23 @@ main {
 }
 
 .buttons .button.glasscord.outline {
-	border-color: #c03cdb;
+	border-color: var(--glasscord-gradient);
+}
+
+.buttons .button.glasscord.outline:hover {
+	border-color: white;
+	color: white;
+	background: var(--glasscord-gradient);
 }
 
 .buttons .button.red.outline {
 	border-color: #ff0000;
+}
+
+.buttons .button.red.outline:hover {
+	border-color: white;
+	color: white;
+	background: var(--red-gradient);
 }
 
 .buttons .sub-button {
@@ -211,14 +240,206 @@ footer {
 	padding: 20px;
 	justify-content: space-between;
 	align-items: center;
-	opacity: .6;
+	color: #5a5a5a;
 }
 
-.links {
+footer .license a {
+	text-decoration: none;
+	color: transparent;
+	background: var(--glasscord-gradient);
+	-webkit-background-clip: text;
+}
+
+footer .license a:hover {
+	text-decoration: underline;
+	text-decoration-color: #c03cdb;
+}
+
+footer .links {
 	flex-shrink: 0;
 }
 
-.links a {
+footer .links a {
+	color: inherit;
 	text-decoration: none;
 	margin-left: 8px;
+}
+
+/* Modal */
+.modal {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, .6);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: translateZ(0);
+}
+
+.modal.hidden {
+	display: none;
+}
+
+.modal.entering, .modal.leaving {
+	animation: modal-in .3s forwards;
+}
+
+.modal.entering .modal-inner, .modal.leaving .modal-inner {
+	animation: modal-inner-in .3s forwards;
+}
+
+.modal.leaving, .modal.leaving .modal-inner {
+	animation-direction: reverse;
+}
+
+@keyframes modal-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes modal-inner-in {
+	from { transform: scale(.9); }
+	to { transform: scale(1); }
+}
+
+.modal-inner {
+	background-color: #fffa;
+	width: 60%;
+	height: 75%;
+	position: relative;
+	display: flex;
+	padding: 5px;
+	flex-direction: column;
+	border-radius: 10px;
+}
+
+.modal-header {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px 20px;
+}
+
+.modal-header h3 {
+	text-transform: uppercase;
+	font-weight: 800;
+	letter-spacing: .8px;
+	margin: 0;
+}
+
+.modal-contents {
+	flex: 1;
+	overflow-y: auto;
+	padding: 0 20px 0 20px;
+}
+
+/* Contributors */
+.contributors {
+	display: flex;
+	flex-wrap: wrap;
+	padding-top: 5px;
+	justify-content: space-between;
+	align-content: flex-start;
+}
+
+.contributor {
+	display: flex;
+	padding: 10px;
+	width: 49%;
+	height: 96px;
+	margin-bottom: 15px;
+}
+
+.contributor .avatar {
+	height: 100%;
+	border-radius: 50%;
+	box-shadow: 0px 3px 4px 0px #000a;
+	margin-right: 15px;
+}
+
+.contributor .about {
+	display: flex;
+	flex-direction: column;
+}
+
+.contributor .name {
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+
+.contributor .description {
+	flex: 1;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: .2px;
+	color: #000a;
+	margin-bottom: 5px;
+}
+
+.contributor .links a {
+	color: inherit;
+	text-decoration: none;
+	margin-right: 5px
+}
+
+.floss { /* Free and Libre Open Source Software, not to be confused with that other terrible game */
+	height: 96px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.floss .you {
+	font-size: 18px;
+	color: #000;
+	margin-bottom: 5px;
+}
+
+.floss .gh {
+	font-size: 13px;
+	letter-spacing: .6px;
+	text-transform: uppercase;
+}
+
+.floss a {
+	color: transparent;
+	background: var(--glasscord-gradient);
+	-webkit-background-clip: text;
+}
+
+.floss:nth-child(even) {
+	width: 49%;
+}
+
+.floss:nth-child(odd) {
+	width: 100%;
+}
+
+/* Body blurring */
+body > *:not(.modal) {
+	transition: filter .2s;
+}
+
+body.i-wish-backdrop-filter-would-work-and-not-require-me-to-blur-the-body > *:not(.modal) {
+	filter: blur(3px);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	border: 2px solid transparent;
+	border-radius: 4px;
+	background: var(--glasscord-gradient);
+	background-clip: padding-box;
 }

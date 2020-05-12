@@ -19,12 +19,21 @@ const inquirer = require("inquirer");
 const lib = require("glasscordify-lib");
 
 // console.warn("This is a work in progress; many features will be broken or missing. Proceed with caution.");
+
 var ansi = {
+	reset: "\x1b[0m",
+	black: "\x1b[30m",
+	red: "\x1b[31m",
+	green: "\x1b[32m",
+	yellow: "\x1b[33m",
+	blue: "\x1b[34m",
 	magenta: "\x1b[35m",
 	cyan: "\x1b[36m",
-	reset: "\x1b[0m"
+	white: "\x1b[37m",
 }
 console.log(ansi.cyan + "== " + ansi.magenta + "Glasscord Installer " + ansi.cyan + "==" + ansi.reset + "\n");
+
+let app;
 
 var questions = [
 	{
@@ -37,25 +46,19 @@ var questions = [
 		]
 	},
 	{
-		type: "list",
-		name: "appName",
-		message: "Which application would you like to inject Glasscord into?",
-		choices: [ // TODO: get list of apps that can be installed
-			"Discord",
-			"VSCode"
-		],
+		type: "input",
+		name: "appPath",
+		message: "Enter the path to the executable you would like to install Glasscord into:",
+		validate: checkApp,
 		when: function(answers){
 			return answers.mode == "Install";
 		}
 	},
 	{
-		type: "list",
-		name: "appName",
-		message: "Which application would you like to remove Glasscord from?",
-		choices: [ // TODO: get list of apps that have been patched
-			"Discord",
-			"VSCode"
-		],
+		type: "input",
+		name: "appPath",
+		message: "Enter the path to the executable you would like to remove Glasscord from:",
+		validate: checkApp,
 		when: function(answers){
 			return answers.mode == "Uninstall";
 		}
@@ -63,21 +66,30 @@ var questions = [
 ];
 
 inquirer.prompt(questions).then(answers => {
-	// TODO: make these functions work (with logging).
-	if (answers.mode == "Install") install(answers.appName);
-	else if (answers.mode == "Uninstall") uninstall(answers.appName);
+	if (answers.mode == "Install") install(answers.appPath);
+	else if (answers.mode == "Uninstall") uninstall(answers.appPath);
 	
-	else console.log('Uh oh, something went wrong! Please try again.');
+	else console.log("Uh oh, something went wrong! Please try again.");
 });
 
-async function install(appName){
+
+function checkApp(appPath, answers){
+	app = lib.Installer.checkApp(appPath);
+	if (app.error) return app.error;
+	if (answers.mode == "Install" && app.isPatched) return "App is already patched!";
+	if (answers.mode == "Uninstall" && !app.isPatched) return "App is not patched!";
+	return true;
+}
+
+async function install(appPath){
 	if (!lib.Utils.isGlasscordDownloaded()){
 		console.log("Downloading package...");
 		var result = await lib.Utils.downloadGlasscordAsar();
 		if (result){
-			console.log("Download successful.");
+			console.log(ansi.green + "Download successful." + ansi.reset);
 		} else {
-			console.log("Download failed!");
+			console.log(ansi.red + "Download failed! " + ansi.reset + "Please check your internet connection and try again.");
+			return;
 		}
 	}
 	
@@ -85,5 +97,5 @@ async function install(appName){
 }
 
 function uninstall(appName){
-	console.log(`Uninstalling Glasscord from ${appName}...`);
+	console.log(`Uninstalling Glasscord from ${appPath}...`);
 }

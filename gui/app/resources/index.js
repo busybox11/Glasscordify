@@ -25,7 +25,9 @@ const secondaryButtonElement = document.querySelector(".buttons .button + .butto
 const subButtonElement = document.querySelector(".sub-button");
 const sexyWords = ["sexy", "beautiful", "awesome", "glassy", "orgasmic"];
 const ApplicationStates = Object.freeze({
-	INITIAL: "INITIAL",
+	READY: "READY",
+	DOWNLOADING: "DOWNLOADING",
+	ERRORED: "ERRORED",
 	DRAGGING: "DRAGGING",
 	INSTALLED: "INSTALLED",
 	FAILED: "FAILED"
@@ -48,22 +50,36 @@ function createElement (tag, props) {
 
 function changeApplicationState (newState) {
 	window.requestAnimationFrame(() => {
-		if (newState === currentState) return;
-		if (newState === ApplicationStates.DRAGGING) {
-			headlineElement.innerHTML = "<span class=\"drag-text\">Drag the application</span><br/>on the appropriate button!";
+		if (newState === currentState || currentState === ApplicationStates.ERRORED) return;
+
+		subButtonElement.innerHTML = "";
+		let headline = `Make your installed Electron app look <span class="sexy">${sexyWords[Math.floor(Math.random() * sexyWords.length)]}</span> with <span class="glasscord">Glasscord</span>`;
+		if (newState === ApplicationStates.DOWNLOADING) {
+			headline = "Downloading Glasscord<br/>Please wait..."
+			buttonElement.style.display = "none";
+		} else if (newState === ApplicationStates.ERRORED) {
+			headline = "<span class=\"whoops\">Whoops!</span> An error occurred while initializing. Make sure you're connected to Internet and try again."
+			const btn = buttonElement.cloneNode(true);
+			btn.addEventListener('click', () => ipc.send('restart'))
+			btn.className = "button red";
+			btn.innerText = "Restart Glasscordify";
+			buttonElement.parentNode.replaceChild(btn, buttonElement);
+		} else if (newState === ApplicationStates.DRAGGING) {
+			headline = "<span class=\"drag-text\">Drag the application</span><br/>on the appropriate button!";
+			buttonElement.style.display = "block";
 			buttonElement.className = "button glasscord outline";
 			buttonElement.innerText = "Install";
 			secondaryButtonElement.style.display = "block";
-			subButtonElement.innerHTML = "";
 		} else {
 			secondaryButtonElement.style.display = "none";
-			headlineElement.innerHTML = newState === ApplicationStates.FAILED
-				? "<span class=\"whoops\">Whoops!</span> This application is not supported by Glasscord!"
-				: "Make your installed Electron app look <span class=\"sexy\">sexy</span> with <span class=\"glasscord\">Glasscord</span>";
+			if (newState === ApplicationStates.FAILED) {
+				headline = "<span class=\"whoops\">Whoops!</span> This application is not supported by Glasscord!"
+			}
 
 			// Main button
 			let buttonMain;
-			if (newState === ApplicationStates.INITIAL) {
+			buttonElement.style.display = "block";
+			if (newState === ApplicationStates.READY) {
 				buttonElement.className = "button glasscord";
 				buttonElement.innerText = "Install it!";
 			} else if (newState === ApplicationStates.INSTALLED) {
@@ -75,7 +91,6 @@ function changeApplicationState (newState) {
 			}
 
 			// Sub button
-			subButtonElement.innerHTML = "";
 			if (newState === ApplicationStates.FAILED) {
 				subButtonElement.innerText = "I am very sorry!";
 			} else {
@@ -83,25 +98,55 @@ function changeApplicationState (newState) {
 					href: "#",
 					role: "button",
 					innerText: "Uninstall it",
-					events: { click: e => e.preventDefault() | ipc.send("uninstallClicked") }
+					events: { click: e => e.preventDefault() | ipc.send("uninstall-clicked") }
 				});
 				subButtonElement.appendChild(document.createTextNode("Got tired? "));
 				subButtonElement.appendChild(uninstallButton);
 				subButtonElement.appendChild(document.createTextNode("."));
 			}
 		}
+		headlineElement.innerHTML = headline;
+		console.log('Glasscordify > New state: ' + newState)
 		currentState = newState;
-
-		// Update the sexy value
-		const sexy = document.querySelector(".sexy");
-		if(sexy !== null) sexy.innerText = sexyWords[Math.floor(Math.random() * sexyWords.length)];
 	});
 }
 
 // Event
 document.querySelector(".close").addEventListener("click", () => ipc.send("close"));
 document.querySelector(".minimize").addEventListener("click", () => ipc.send("minimize"));
-buttonElement.addEventListener("click", () => currentState !== ApplicationStates.DRAGGING && ipc.send("installClicked"));
+buttonElement.addEventListener("click", () => currentState !== ApplicationStates.DRAGGING && !buttonElement.disabled && ipc.send("install-clicked"));
+
+// Modal
+const modal = document.querySelector('.modal');
+const openModal = function () {
+	window.requestAnimationFrame(() => {
+		document.body.classList.add('i-wish-backdrop-filter-would-work-and-not-require-me-to-blur-the-body')
+		modal.setAttribute('aria-hidden', 'false'); // Mark it as immediately visible
+		modal.classList.remove('hidden');
+		modal.classList.add('entering');
+		setTimeout(() => window.requestAnimationFrame(() => {
+			modal.classList.remove('entering');
+		}), 300)
+	});
+}
+const closeModal = function () {
+	window.requestAnimationFrame(() => {
+		document.body.classList.remove('i-wish-backdrop-filter-would-work-and-not-require-me-to-blur-the-body')
+		modal.setAttribute('aria-hidden', 'true'); // Mark it as immediately hidden
+		modal.classList.add('leaving');
+		setTimeout(() => window.requestAnimationFrame(() => {
+			modal.classList.remove('leaving');
+			modal.classList.add('hidden');
+		}), 300)
+	});
+}
+
+document.querySelector('.modal-inner').addEventListener('click', e => e.stopPropagation());
+document.querySelector('#awesome').addEventListener('click', openModal);
+document.querySelector('#modal-close').addEventListener('click', closeModal);
+document.querySelector('.modal').addEventListener('click', closeModal);
+
+// Drag and drop
 window.ondragover = e => {
 	if ([ ...e.dataTransfer.items ].some(f => f.kind === "file")) {
 		changeApplicationState(ApplicationStates.DRAGGING);
@@ -112,26 +157,30 @@ window.ondragleave = () => false;
 window.ondragend = () => false;
 window.ondrop = e => {
 	e.preventDefault();
-	changeApplicationState(ApplicationStates.INITIAL);
+	if (currentState === ApplicationStates.DRAGGING) changeApplicationState(ApplicationStates.READY);
 	return false;
 };
 buttonElement.addEventListener("drop", e => {
 	if (currentState === ApplicationStates.DRAGGING && e.dataTransfer.files.length !== 0) {
-		ipc.send("installDrop", [ ...e.dataTransfer.files ].map(f => f.path));
+		ipc.send("install-drop", [ ...e.dataTransfer.files ].map(f => f.path));
 	}
 });
 secondaryButtonElement.addEventListener("drop", e => {
 	if (currentState === ApplicationStates.DRAGGING && e.dataTransfer.files.length !== 0) {
-		ipc.send("uninstallDrop", [ ...e.dataTransfer.files ].map(f => f.path));
+		ipc.send("uninstall-drop", [ ...e.dataTransfer.files ].map(f => f.path));
 	}
 });
 
 // IPC events
-ipc.on("installSuccess", () => {
+ipc.on("install-success", () => {
 	changeApplicationState(ApplicationStates.INSTALLED);
-	setTimeout(() => changeApplicationState(ApplicationStates.INITIAL), 10e3);
+	setTimeout(() => changeApplicationState(ApplicationStates.READY), 10e3);
 });
-ipc.on("installFailed", () => changeApplicationState(ApplicationStates.FAILED));
+ipc.on("install-failed", () => changeApplicationState(ApplicationStates.FAILED));
+ipc.on("asar-download", () => changeApplicationState(ApplicationStates.DOWNLOADING));
+ipc.on("asar-success", () => changeApplicationState(ApplicationStates.READY));
+ipc.on("asar-failure", () => changeApplicationState(ApplicationStates.ERRORED));
 
 // Trigger initial rendering
-changeApplicationState(ApplicationStates.INITIAL);
+changeApplicationState(ApplicationStates.READY);
+ipc.send('ready');
